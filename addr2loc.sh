@@ -5,7 +5,7 @@ if [[ "$1" == "-g" ]] ; then
 	command -v osmfilter || ( echo "No osmfilter found in \$PATH" && exit )
 	if ls addresses.csv > /dev/null 2>&1; then echo "addresses.csv exists in folder" && exit ; fi
 	temp=$(mktemp -d)
-	printf "%s\n" "Enter path to .pbf file"
+	echo -e "Enter path to .pbf file\nYou can download it from https://download.geofabrik.de/"
 	read pbf
 	osmconvert "$pbf" -o="$temp"/XXX.xml --all-to-nodes --statistics
 	osmfilter "$temp"/XXX.xml --keep="place=city OR building OR addr* OR name OR amenity" --drop-author --drop-version -o="$temp"/xxx-buildg.xml
