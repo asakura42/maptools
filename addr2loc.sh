@@ -16,5 +16,5 @@ if [[ "$1" == "-g" ]] ; then
 fi
 echo -e "Enter your query:\n(city?), street, house number"
 read query
-list=$(grep -i "$(echo "$query" | sed 's/[-, ]/.*/g')" "$addresses" | awk -F';' '{print $2 ";" $3 ";" $4 ";" $7 ";" $8}')
+list=$(grep -i "$(echo "$query" | sed 's/[-, ]/.*;/g;s/$/.*/')" "$addresses" | awk -F';' '{print $2 ";" $3 ";" $4 ";" $7 ";" $8}')
 echo "$list" | sed 's/;\+/;/g;s/;/ | /g' | fzf | awk -F'|' '{print $(NF-1) $NF}' | sed 's/^ //;s/  / /'
