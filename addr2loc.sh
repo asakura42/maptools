@@ -7,9 +7,10 @@ if [[ "$1" == "-g" ]] ; then
 	temp=$(mktemp -d)
 	echo -e "Enter path to .pbf file\nYou can download it from https://download.geofabrik.de/"
 	read pbf
-	osmconvert "$pbf" -o="$temp"/XXX.xml --all-to-nodes --statistics
+	osmconvert "$pbf" -o="$temp"/XXX.xml --statistics
 	osmfilter "$temp"/XXX.xml --keep="place=city OR building OR addr* OR name OR amenity" --drop-author --drop-version -o="$temp"/xxx-buildg.xml
-	osmconvert "$temp"/xxx-buildg.xml -o="$temp"/result.csv --csv-headline --csv-separator=; --csv="@id addr:city addr:street addr:housenumber name amenity @lat @lon"
+	osmconvert "$temp"/xxx-buildg.xml -o="$temp"/1.xml --all-to-nodes --statistics
+	osmconvert "$temp"/1.xml -o="$temp"/result.csv --csv-headline --csv-separator=';' --csv='@id addr:city addr:street addr:housenumber name amenity @lat @lon'
 	awk -F';' '$4 && $7' "$temp"/result.csv > addresses.csv
 	echo -e "now do:\nmkdir -p $(dirname ${addresses}) && cat addresses.csv >> \"$addresses\" && sort -u \"$addresses\" -o \"$addresses\""
 	exit
